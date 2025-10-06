@@ -1,7 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+// eslint-disable-next-line import/extensions
+import { Keyboard } from './components/keyboard';
+export const App: React.FC = () => {
+  const [keyUp, setKeyUp] = useState('');
+  const [pressedKey, setPressedKey] = useState(false);
 
-export const App: React.FC = () => (
-  <div className="App">
-    <p className="App__message">The last pressed key is [Enter]</p>
-  </div>
-);
+  const onKey = (event: KeyboardEvent) => {
+    setKeyUp(event.key);
+    setPressedKey(true);
+  };
+
+  useEffect(() => {
+    document.addEventListener('keyup', onKey);
+
+    return () => {
+      document.removeEventListener('keyup', onKey);
+    };
+  }, []);
+
+  const defoultMessege = 'Nothing was pressed yet';
+
+  return (
+    <div className="App">
+      {!pressedKey ? (
+        <p className="App__message">{defoultMessege}</p>
+      ) : (
+        <Keyboard keyUp={keyUp} />
+      )}
+    </div>
+  );
+};
