@@ -1,23 +1,17 @@
 import React from 'react';
 
-type KeyType = {
-  keyUp: string;
+type Props = {
+  pressedKey: string;
 };
 
-type State = {
-  keyUp: string;
-};
-
-export class Keyboard extends React.Component<KeyType, State> {
-  state: State = {
-    keyUp: '',
-  };
-
+export class Keyboard extends React.Component<Props> {
   render() {
-    const { keyUp } = this.props;
+    const { pressedKey } = this.props;
 
     return (
-      <p className="App__message">{`The last pressed key is [${keyUp}]`}</p>
+      <div className="Keyboard">
+        <p>Last pressed key: {pressedKey}</p>
+      </div>
     );
   }
 }

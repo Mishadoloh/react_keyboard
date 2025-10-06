@@ -1,33 +1,41 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
-// eslint-disable-next-line import/extensions
+import React from 'react';
 import { Keyboard } from './components/keyboard';
-export const App: React.FC = () => {
-  const [keyUp, setKeyUp] = useState('');
-  const [pressedKey, setPressedKey] = useState(false);
 
-  const onKey = (event: KeyboardEvent) => {
-    setKeyUp(event.key);
-    setPressedKey(true);
+type State = {
+  pressedKey: string | null;
+};
+
+export class App extends React.Component<{}, State> {
+  state: State = {
+    pressedKey: null,
   };
 
-  useEffect(() => {
-    document.addEventListener('keyup', onKey);
+  handleKeyUp = (event: KeyboardEvent) => {
+    this.setState({ pressedKey: event.key });
+  };
 
-    return () => {
-      document.removeEventListener('keyup', onKey);
-    };
-  }, []);
+  componentDidMount() {
+    document.addEventListener('keyup', this.handleKeyUp);
+  }
 
-  const defoultMessege = 'Nothing was pressed yet';
+  componentWillUnmount() {
+    document.removeEventListener('keyup', this.handleKeyUp);
+  }
 
-  return (
-    <div className="App">
-      {!pressedKey ? (
-        <p className="App__message">{defoultMessege}</p>
-      ) : (
-        <Keyboard keyUp={keyUp} />
-      )}
-    </div>
-  );
-};
+  render() {
+    const { pressedKey } = this.state;
+
+    return (
+      <div className="App">
+        <h1 className="App__title">Keyboard Trainer</h1>
+        <p className="App__message">
+          {pressedKey
+            ? `The last pressed key is [${pressedKey}]`
+            : 'Press any key to start!'}
+        </p>
+
+        <Keyboard pressedKey={pressedKey || ''} />
+      </div>
+    );
+  }
+}
