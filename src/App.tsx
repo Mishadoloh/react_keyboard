@@ -31,7 +31,7 @@ export class App extends React.Component<{}, State> {
         <p className="App__message">
           {pressedKey
             ? `The last pressed key is [${pressedKey}]`
-            : 'Press any key to start!'}
+            : 'Nothing was pressed yet'}
         </p>
 
         <Keyboard pressedKey={pressedKey || ''} />
